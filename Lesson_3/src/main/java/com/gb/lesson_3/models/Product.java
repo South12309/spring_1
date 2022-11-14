@@ -5,16 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Product {
-    private int id;
+    private Long id;
     private String title;
-    private float cost;
+    private BigDecimal cost;
 
-    public Product(int id) {
+    public Product(Long id) {
         this.id=id;
     }
 
