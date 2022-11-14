@@ -1,10 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>New product</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
+<h1>Product list</h1>
+<form th:action="@{/products/new}" th:method="post" th:object="${product}">
+<table>
+    <tr>
+        <th>Id</th>
+        <td> <input type="text" th:field="*{id}" readonly/> </td>
+
+    </tr>
+    <tr>
+        <th>Tittle</th>
+        <td> <input type="text" th:field="*{title}"/> </td>
+
+    </tr>
+    <tr>
+        <th>Coast</th>
+
+        <td> <input type="text" th:field="*{cost}"/> </td>
+    </tr>
+
+
+</table>
+    <button type="submit" th:text="Save"/>
+    <button type="reset" th:text="Reset"/>
+
+</form>
+
 
 </body>
 </html>

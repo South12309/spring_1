@@ -3,11 +3,11 @@ package com.gb.lesson_3.services;
 import com.gb.lesson_3.models.Product;
 import com.gb.lesson_3.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 

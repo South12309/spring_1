@@ -1,14 +1,12 @@
 package com.gb.lesson_3.controllers;
 
 import com.gb.lesson_3.models.Product;
+import com.gb.lesson_3.repository.ProductRepository;
 import com.gb.lesson_3.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
@@ -30,14 +28,13 @@ public class ProductController {
 
     @GetMapping("/new")
     public String newProduct(Model model) {
-        model.addAttribute("product", new Product());
+        model.addAttribute("product", new Product(ProductRepository.getINDEX()));
         return "new_product";
     }
 
     @PostMapping("/new")
-    public String addProduct(Model model) {
-        Product product = (Product)model.getAttribute("product");
+    public String addProduct(@ModelAttribute("product")Product product) {
         productService.addProduct(product);
-        return "redirect:products";
+        return "redirect:/products";
     }
 }

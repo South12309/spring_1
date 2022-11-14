@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>products</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
+<h1>Product list</h1>
+<a href="/products/new">New product</a>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Cost</th>
+    </tr>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.getId()}"/>
+        <td th:text="${product.getTitle()}"/>
+        <td th:text="${product.getCost()}"/>
+    </tr>
+</table>
+
 
 </body>
 </html>
