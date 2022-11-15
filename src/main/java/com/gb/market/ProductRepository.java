@@ -1,13 +1,13 @@
-package com.gb;
+package com.gb.market;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import javax.annotation.PostConstruct;
 @Component
 public class ProductRepository {
-    private List<Product> products;
+    private final List<Product> products=new ArrayList<>();
 
     @PostConstruct
     public void fillFirstRepository() {
