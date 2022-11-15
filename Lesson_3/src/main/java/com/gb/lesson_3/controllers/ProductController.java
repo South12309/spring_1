@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
@@ -20,21 +20,29 @@ public class ProductController {
     }
 
     @GetMapping
-    public String getAllProducts(Model model) {
-        List<Product> allProducts = productService.getAllProducts();
-        model.addAttribute("products", allProducts);
-        return "products";
-    }
-
-    @GetMapping("/new")
-    public String newProduct(Model model) {
-        model.addAttribute("product", new Product(ProductRepository.getINDEX()));
-        return "new_product";
+    public List<Product> getAllProducts(Model model) {
+         return productService.getAllProducts();
     }
 
     @PostMapping("/new")
-    public String addProduct(@ModelAttribute("product")Product product) {
+    public void addProduct(@RequestBody Product product) {
         productService.addProduct(product);
-        return "redirect:/products";
     }
+
+    @PostMapping("/update")
+    public void updateProduct(@RequestBody Product product) {
+        productService.updateProduct(product);
+    }
+
+    @GetMapping("/{id}")
+    public Product addProduct(@PathVariable Long id) {
+       return productService.getProductById(id);
+    }
+
+    @GetMapping("/delete/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+    }
+
+
 }

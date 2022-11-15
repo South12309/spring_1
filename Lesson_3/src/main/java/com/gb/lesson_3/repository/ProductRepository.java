@@ -34,6 +34,17 @@ public class ProductRepository {
     }
 
     public void addProduct(Product product) {
+        product.setId(getINDEX()); // какой бы не присвоили во фронте id меняем на следующий по порядку в "базе"
         products.add(product);
+    }
+
+    public void deleteProduct(Long id) {
+        products.removeIf(product -> product.getId().equals(id));
+    }
+
+    public void updateProduct(Product product) {
+        Product productForUpdate = getProductById(product.getId());
+        productForUpdate.setTitle(product.getTitle());
+        productForUpdate.setCost(product.getCost());
     }
 }
