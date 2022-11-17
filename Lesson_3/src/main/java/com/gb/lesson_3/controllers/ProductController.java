@@ -1,7 +1,7 @@
 package com.gb.lesson_3.controllers;
 
 import com.gb.lesson_3.models.Product;
-import com.gb.lesson_3.repository.ProductRepository;
+import com.gb.lesson_3.repository.ProductRepositoryMemory;
 import com.gb.lesson_3.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,13 +28,13 @@ public class ProductController {
 
     @GetMapping("/new")
     public String newProduct(Model model) {
-        model.addAttribute("product", new Product(ProductRepository.getINDEX()));
+        model.addAttribute("product", new Product(ProductRepositoryMemory.getINDEX()));
         return "new_product";
     }
 
     @PostMapping("/new")
     public String addProduct(@ModelAttribute("product")Product product) {
-        productService.addProduct(product);
+        productService.saveOrUpdateProduct(product);
         return "redirect:/products";
     }
 }
