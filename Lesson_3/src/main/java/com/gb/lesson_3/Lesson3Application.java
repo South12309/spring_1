@@ -9,12 +9,7 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class Lesson3Application {
 
-    @Bean
-    public SessionFactory sessionFactory() {
-        SessionFactory sessionFactory = new Configuration()
-                .buildSessionFactory();
-        return sessionFactory;
-    }
+
     public static void main(String[] args) {
         SpringApplication.run(Lesson3Application.class, args);
     }

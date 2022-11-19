@@ -1,12 +1,11 @@
 package com.gb.lesson_3.repository;
 
 import com.gb.lesson_3.models.Product;
-import jakarta.annotation.PostConstruct;
-import org.springframework.stereotype.Repository;
-
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ProductRepositoryMemory implements ProductRepository{
     private final List<Product> products=new ArrayList<>();
@@ -14,6 +13,7 @@ public class ProductRepositoryMemory implements ProductRepository{
     public static Long getINDEX() {
         return INDEX++;
     }
+
 
     @PostConstruct
     public void fillFirstRepository() {

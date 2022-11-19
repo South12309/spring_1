@@ -1,6 +1,7 @@
 package com.gb.lesson_3.services;
 
 import com.gb.lesson_3.models.Product;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
