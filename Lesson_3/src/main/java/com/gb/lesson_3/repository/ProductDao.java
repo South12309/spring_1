@@ -13,8 +13,11 @@ import java.util.List;
 @Repository
 public class ProductDao implements ProductRepository {
 
+private final SessionFactoryBean sessionFactory;
 @Autowired
- private SessionFactoryBean sessionFactory;
+    public ProductDao(SessionFactoryBean sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
 
     public Product findById(Long id) {
