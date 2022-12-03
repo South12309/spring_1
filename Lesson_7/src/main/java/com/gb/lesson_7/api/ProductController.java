@@ -42,4 +42,9 @@ public class ProductController {
         productService.deleteProductById(id);
     }
 
+    @GetMapping("/get_by_page")
+    public List<Product> getPage(@RequestParam(defaultValue = "0") Integer pageNumber, @RequestParam(defaultValue = "10") Integer pageSize) {
+        return productService.getPage(pageNumber, pageSize).toList();
+    }
+
 }
