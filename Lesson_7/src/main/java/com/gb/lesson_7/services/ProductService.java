@@ -2,13 +2,16 @@ package com.gb.lesson_7.services;
 
 import com.gb.lesson_7.models.Product;
 import com.gb.lesson_7.repositoryes.ProductRepository;
+import com.gb.lesson_7.repositoryes.specifications.ProductsSpecifications;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -25,8 +28,19 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(BigDecimal minCost, BigDecimal maxCost, String titlePart, Integer page) {
+        Specification<Product> spec = Specification.where(null);
+        if (minCost!=null) {
+            spec=spec.and(ProductsSpecifications.costLessOrEqualsThan(minCost));
+        }
+        if (maxCost!=null) {
+            spec=spec.and(ProductsSpecifications.costGreaterOrEqualsThan(maxCost));
+        }
+        if (titlePart!=null) {
+            spec=spec.and(ProductsSpecifications.nameLike(titlePart));
+        }
+
+        return productRepository.findAll(spec,PageRequest.of(page-1,10));
     }
 
     public Product addProduct(Product product) {
