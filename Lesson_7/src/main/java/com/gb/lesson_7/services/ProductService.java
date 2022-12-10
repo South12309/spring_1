@@ -1,5 +1,6 @@
 package com.gb.lesson_7.services;
 
+import com.gb.lesson_7.dto.ProductDto;
 import com.gb.lesson_7.models.Product;
 import com.gb.lesson_7.repositoryes.ProductRepository;
 import com.gb.lesson_7.repositoryes.specifications.ProductsSpecifications;
@@ -42,8 +43,16 @@ public class ProductService {
 
         return productRepository.findAll(spec,PageRequest.of(page-1,10));
     }
+@Transactional
+    public Product updateProduct(ProductDto productDto) {
+        Product product = productRepository.findById(productDto.getId()).orElseThrow();
+        product.setTitle(productDto.getTitle());
+        product.setCost(productDto.getCost());
+        return product;
+    }
 
-    public Product addProduct(Product product) {
+    public Product addProduct(ProductDto productDto) {
+        Product product = new Product(null, productDto.getTitle(), productDto.getCost());
         return productRepository.save(product);
     }
 

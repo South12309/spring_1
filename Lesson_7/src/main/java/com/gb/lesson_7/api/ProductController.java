@@ -20,7 +20,7 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
         for (int i = 1; i < 21; i++) {
-            productService.addProduct(new Product(null,"product" +i, new BigDecimal(i*10)));
+            productService.addProduct(new ProductDto(null,"product" +i, new BigDecimal(i*10)));
         }
     }
 
@@ -42,18 +42,14 @@ public class ProductController {
 
     @PostMapping
     public ProductDto addProduct(@RequestBody ProductDto productDto) {
-        Product product = new Product();
-        product.setTitle(productDto.getTitle());
-        product.setCost(productDto.getCost());
-        return new ProductDto(productService.addProduct(product));
+
+        return new ProductDto(productService.addProduct(productDto));
     }
 
     @PutMapping
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
-        Product product = productService.getProduct(productDto.getId());
-        product.setTitle(productDto.getTitle());
-        product.setCost(productDto.getCost());
-        return new ProductDto(productService.addProduct(product));
+
+        return new ProductDto(productService.updateProduct(productDto));
     }
 
     @DeleteMapping("/{id}")
