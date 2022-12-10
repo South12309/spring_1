@@ -1,14 +1,16 @@
 package com.gb.lesson_7.api;
 
+import com.gb.lesson_7.dto.ProductDto;
 import com.gb.lesson_7.models.Product;
 import com.gb.lesson_7.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@RequestMapping("/app/products")
+@RequestMapping("/app/api/v1/products")
 @RestController
 public class ProductController {
 
@@ -18,26 +20,39 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
         for (int i = 1; i < 21; i++) {
-            productService.addProduct(new Product(null,"product" +i, new BigDecimal(i*10)));
+            productService.addProduct(new ProductDto(null,"product" +i, new BigDecimal(i*10)));
         }
     }
 
-    @GetMapping()
-    public List<Product> getAllProducts(@RequestParam(required = false) Integer min, @RequestParam(required = false) Integer max) {
-        return productService.findProductsByCoastBetween(min, max);
+    @GetMapping
+    public Page<ProductDto> getAllProducts(
+            @RequestParam(name="p", defaultValue = "1") Integer page,
+            @RequestParam(required = false) BigDecimal min,
+            @RequestParam(required = false) BigDecimal max,
+            @RequestParam(required = false) String tittlePart
+    ) {
+        if(page < 1){page = 1;}
+        return productService.getAllProducts(min, max, tittlePart, page).map(s->new ProductDto(s));
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
-        return productService.getProduct(id);
+    public ProductDto getProduct(@PathVariable Long id) {
+        return new ProductDto(productService.getProduct(id));
     }
 
-    @PostMapping("/new")
-    public Product addProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
+    @PostMapping
+    public ProductDto addProduct(@RequestBody ProductDto productDto) {
+
+        return new ProductDto(productService.addProduct(productDto));
     }
 
-    @GetMapping("/delete/{id}")
+    @PutMapping
+    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
+
+        return new ProductDto(productService.updateProduct(productDto));
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProductById(id);
     }
