@@ -44,6 +44,10 @@
       <td>
         <button class="btn btn-danger" ng-click="deleteProductById(p.id)">Удалить товар</button>
       </td>
+      <td>
+        <button class="btn type-signature" ng-click="addProductToCart(p)">Добавить товар в корзину</button>
+      </td>
+
     </tr>
     </tbody>
   </table>
@@ -53,6 +57,29 @@
     <button class="btn btn-secondary"  ng-click="change_page(- 1, 10)" >Предыдущая страница </button>
     <button class="btn btn-primary" ng-click="change_page(1, 10)" >Следующая страница</button>
   </div>
+
+  <h3>Корзина</h3>
+  <table class ="table table-hover">
+    <tr>
+      <td>id</td>
+      <td>id продукта</td>
+      <td>Название</td>
+      <td>Цена</td>
+      <td>Удаление товара</td>
+    </tr>
+    <tbody>
+    <tr ng-repeat="pfc in ProductsFromCart">
+      <td>{{pfc.cart_id}}</td>
+      <td>{{pfc.id}}</td>
+      <td>{{pfc.title}}</td>
+      <td>{{pfc.cost}}</td>
+      <td>
+        <button class="btn sub-nav" ng-click="deleteProductFromCart(pfc.cart_id)">Удалить товар из корзины</button>
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
 
 </div>
 </body>

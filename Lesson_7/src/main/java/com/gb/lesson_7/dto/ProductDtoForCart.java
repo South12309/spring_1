@@ -1,10 +1,9 @@
 package com.gb.lesson_7.dto;
 
-import com.gb.lesson_7.models.Product;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -12,7 +11,8 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductDto {
+public class ProductDtoForCart {
+    private Long cart_id;
     private Long id;
     private String title;
     private BigDecimal cost;

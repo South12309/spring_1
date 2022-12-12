@@ -1,6 +1,7 @@
 package com.gb.lesson_7.api;
 
 import com.gb.lesson_7.dto.ProductDto;
+import com.gb.lesson_7.mappers.ProductMapper;
 import com.gb.lesson_7.models.Product;
 import com.gb.lesson_7.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,24 +33,25 @@ public class ProductController {
             @RequestParam(required = false) String tittlePart
     ) {
         if(page < 1){page = 1;}
-        return productService.getAllProducts(min, max, tittlePart, page).map(s->new ProductDto(s));
+        return productService.getAllProducts(min, max, tittlePart, page).map(s-> ProductMapper.MAPPER.fromProduct(s));
     }
 
     @GetMapping("/{id}")
     public ProductDto getProduct(@PathVariable Long id) {
-        return new ProductDto(productService.getProduct(id));
+
+        return ProductMapper.MAPPER.fromProduct(productService.getProduct(id));
     }
 
     @PostMapping
     public ProductDto addProduct(@RequestBody ProductDto productDto) {
 
-        return new ProductDto(productService.addProduct(productDto));
+        return ProductMapper.MAPPER.fromProduct(productService.addProduct(productDto));
     }
 
     @PutMapping
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
 
-        return new ProductDto(productService.updateProduct(productDto));
+        return ProductMapper.MAPPER.fromProduct(productService.updateProduct(productDto));
     }
 
     @DeleteMapping("/{id}")
