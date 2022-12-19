@@ -15,7 +15,7 @@
 <div class="container" ng-controller="indexController">
   <h1>Магазин</h1>
   <h2>Добавить новый продукт</h2>
-  <form ng-submit="submitCreateNewProduct()">
+  <form ng-model="newProduct" ng-submit="submitCreateNewProduct()">
 
     <label>
       Наименование:
@@ -34,6 +34,7 @@
       <td>id</td>
       <td>Название</td>
       <td>Цена</td>
+      <td>Редактировать</td>
       <td>Удаление товара</td>
     </tr>
     <tbody>
@@ -41,6 +42,9 @@
       <td>{{p.id}}</td>
       <td>{{p.title}}</td>
       <td>{{p.cost}}</td>
+      <td>
+        <button class="btn btn-signature" ng-click="toEditProduct(p)">Редактировать товар</button>
+      </td>
       <td>
         <button class="btn btn-danger" ng-click="deleteProductById(p.id)">Удалить товар</button>
       </td>
@@ -57,6 +61,27 @@
     <button class="btn btn-secondary"  ng-click="change_page(- 1, 10)" >Предыдущая страница </button>
     <button class="btn btn-primary" ng-click="change_page(1, 10)" >Следующая страница</button>
   </div>
+
+
+    <h2>Редактирование продукта</h2>
+    <form ng-model="editProduct" ng-submit="submitEditProduct()">
+      <label>
+        Id:
+        <input type="number" name="id" ng-model="editProduct.id" >
+      </label>
+
+      <label>
+        Наименование:
+        <input type="text" name="title" ng-model="editProduct.title" >
+      </label>
+
+      <label>
+        Цена:
+        <input type="number" name="cost" ng-model="editProduct.cost" >
+      </label>
+      <button class="btn btn-success" type="submit" >Сохранить товар</button>
+    </form>
+
 
   <h3>Корзина</h3>
   <table class ="table table-hover">

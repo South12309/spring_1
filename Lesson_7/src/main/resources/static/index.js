@@ -18,18 +18,32 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
     $scope.deleteProductById = function (productId) {
-        $http.get(contextPath + '/products/delete/' + productId)
+        $http.delete(contextPath + '/products/' + productId)
             .then(function (response) {
                 $scope.change_page($scope.offsetPage, 10);
             });
     }
 
+    $scope.toEditProduct = function (product) {
+       $scope.editProduct=product;
+        
+    }
+
+
     $scope.submitCreateNewProduct = function () {
-        $http.post(contextPath + '/products/new', $scope.newProduct)
+        $http.post(contextPath + '/products', $scope.newProduct)
             .then(function (response) {
                 $scope.change_page($scope.offsetPage, 10);
             });
     }
+
+    $scope.submitEditProduct = function () {
+        $http.put(contextPath + '/products', $scope.editProduct)
+            .then(function (response) {
+                $scope.change_page($scope.offsetPage, 10);
+            });
+    }
+
     $scope.addProductToCart = function (product) {
         $http.post(contextPath + '/carts', product)
             .then(function (response) {
