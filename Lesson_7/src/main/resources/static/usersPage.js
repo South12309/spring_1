@@ -1,4 +1,4 @@
-angular.module('app', []).controller('userController', function ($scope, $http) {
+angular.module('appUser', []).controller('userController', function ($scope, $http) {
     const contextPath = 'http://localhost:8080/app/api/v1';
 
     $scope.getUsers = function () {
