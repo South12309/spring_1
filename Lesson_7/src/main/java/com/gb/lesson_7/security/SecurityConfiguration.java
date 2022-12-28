@@ -1,29 +1,38 @@
 package com.gb.lesson_7.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
-public class SecurityConfiguration {
+
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private JwtRequestFilter filter;
+    private final JwtRequestFilter filter;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -34,10 +43,21 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
-                .antMatchers( "/**").authenticated()//.hasAnyRole("ADMIN","SUPERADMIN","MANAGER")
-//                .antMatchers(HttpMethod.POST, "/**").hasAnyRole("ADMIN","SUPERADMIN","MANAGER")
+                .antMatchers(HttpMethod.POST, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
+                .antMatchers(HttpMethod.PUT, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
+                .antMatchers( "/api/vi/products/**").authenticated()
+                .antMatchers( HttpMethod.GET, "/api/vi/users/**").authenticated()
 //                .antMatchers(HttpMethod.PUT, "/**").hasAnyRole("ADMIN", "SUPERADMIN", "MANAGER")
 //                .antMatchers(HttpMethod.DELETE, "/**").hasAnyRole("ADMIN", "SUPERADMIN", "MANAGER")
+                .anyRequest().permitAll()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .headers().frameOptions().disable()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 //                .build();
@@ -75,14 +95,16 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationProvider... authenticationProviders) {
-        return new ProviderManager(authenticationProviders);
+    public AuthenticationManager authenticationManager(AuthenticationProvider... authenticationProviders) throws Exception {
+        return super.authenticationManagerBean();
+      //  return new ProviderManager(authenticationProviders);
+
     }
 
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 //    //ПРОВАЙДЕР
 //    @Bean
 //    public DaoAuthenticationProvider daoAuthenticationProvider() {

@@ -35,7 +35,7 @@ public class AuthorizationController {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
 
-            log.debug(request.getUsername());
+           // log.debug(request.getUsername());
             UserDetails user = (UserDetails) authenticate.getPrincipal();
             String jwtToken = jwtService.generateJwtToken(user);
             return new AuthResponse(jwtToken);
