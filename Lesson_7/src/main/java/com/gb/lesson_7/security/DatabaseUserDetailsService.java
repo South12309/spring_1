@@ -4,37 +4,45 @@ import com.gb.lesson_7.models.Role;
 import com.gb.lesson_7.repositoryes.RoleRepository;
 import com.gb.lesson_7.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Collection;
 import java.util.List;
+@Slf4j
 
-@RequiredArgsConstructor
 public class DatabaseUserDetailsService implements UserDetailsService {
+@Autowired
+    private UserService userService;
 
-    private final UserService userService;
-    private final RoleRepository roleRepository;
-    // FIXME: 08.12.2022 Инжектим сюда репозиторий UserRepository
-    // FIXME: 08.12.2022 Инжектим сюда репозиторий RoleRepository
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         com.gb.lesson_7.models.User user = userService.getUserByLogin(username);
-        // FIXME: 08.12.2022 Загружаем юзера из БД (если его нет, бросает UsernameNotFoundException)
-        // FIXME: 08.12.2022 Загружаем роли для юзера из БД
-        // FIXME: 08.12.2022 Строим объект типа UserDetails
 
-        return User.builder()
+
+        UserDetails userDetails = User.builder()
                 .username(user.getLogin())
                 .password(user.getPassword())
-                .authorities("")
+                .authorities(getAuthorities(user.getRoles()))
                 .build();
+     //   userDetails.getAuthorities().stream().forEach(s->log.error(s.getAuthority()));
+
+        return userDetails;
     }
 
-    private List<GrantedAuthority> getAuthorities(List<Role> roles) {
-
+    private List<GrantedAuthority> getAuthorities(Collection<Role> roles) {
+        return roles.stream()
+                .map(role->role.getName())
+                .map(SimpleGrantedAuthority::new)
+                .map(it -> (GrantedAuthority) it)
+                .toList();
     }
+
 }
