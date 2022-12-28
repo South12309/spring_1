@@ -29,7 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
     @Autowired
     private final JwtRequestFilter filter;
@@ -96,8 +96,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationProvider... authenticationProviders) throws Exception {
-        return super.authenticationManagerBean();
-      //  return new ProviderManager(authenticationProviders);
+      //  return super.authenticationManagerBean();
+        return new ProviderManager(authenticationProviders);
 
     }
 
