@@ -3,6 +3,7 @@ package com.gb.lesson_7.api;
 import com.gb.lesson_7.dto.AuthRequest;
 import com.gb.lesson_7.dto.AuthResponse;
 import com.gb.lesson_7.services.JwtService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,14 +20,13 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class AuthorizationController {
 
-    // auth manager -> [auth provider]
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtService jwtService;
 
     @PostMapping("/auth")
     public AuthResponse authorize(@RequestBody AuthRequest request) {

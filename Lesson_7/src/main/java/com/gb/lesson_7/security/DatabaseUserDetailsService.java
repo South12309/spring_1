@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 
 public class DatabaseUserDetailsService implements UserDetailsService {
@@ -37,12 +39,12 @@ public class DatabaseUserDetailsService implements UserDetailsService {
         return userDetails;
     }
 
-    private List<GrantedAuthority> getAuthorities(Collection<Role> roles) {
+    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
         return roles.stream()
                 .map(role->role.getName())
                 .map(SimpleGrantedAuthority::new)
-                .map(it -> (GrantedAuthority) it)
-                .toList();
+               // .map(it -> (GrantedAuthority) it)
+                .collect(Collectors.toList());
     }
 
 }

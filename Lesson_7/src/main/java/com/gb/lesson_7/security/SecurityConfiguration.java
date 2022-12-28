@@ -25,11 +25,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Autowired
     private final JwtRequestFilter filter;
@@ -38,9 +37,8 @@ public class SecurityConfiguration {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return webSecurity -> webSecurity.ignoring().antMatchers("/auth");
     }
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+@Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
@@ -48,8 +46,6 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.DELETE, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
                 .antMatchers( "/api/vi/products/**").authenticated()
                 .antMatchers( HttpMethod.GET, "/api/vi/users/**").authenticated()
-//                .antMatchers(HttpMethod.PUT, "/**").hasAnyRole("ADMIN", "SUPERADMIN", "MANAGER")
-//                .antMatchers(HttpMethod.DELETE, "/**").hasAnyRole("ADMIN", "SUPERADMIN", "MANAGER")
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -57,31 +53,36 @@ public class SecurityConfiguration {
                 .headers().frameOptions().disable()
                 .and()
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and()
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-//                .build();
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
+                httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
-        return httpSecurity.build();
-
-//        return httpSecurity.authoriz
-//                .antMatchers("/api/**").authenticated()
-//                .and()
-//                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-
-//        return httpSecurity.authorizeHttpRequests()
-//                .requestMatchers("/**").permitAll()
-//               // .requestMatchers(HttpMethod.POST, "/**").authenticated()//.hasAnyRole("ADMIN","SUPERADMIN","MANAGER")
-////                .requestMatchers(HttpMethod.PUT, "/**").hasAnyRole("ADMIN","SUPERADMIN","MANAGER")
-////                .requestMatchers(HttpMethod.DELETE, "/**").hasAnyRole("ADMIN","SUPERADMIN","MANAGER")
-//                .and()
-//                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
 
 
     }
-
+/**
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity
+//                .authorizeRequests()
+//                .antMatchers(HttpMethod.POST, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
+//                .antMatchers(HttpMethod.PUT, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
+//                .antMatchers(HttpMethod.DELETE, "/api/vi/users/**").hasAnyRole("ADMIN","SUPERADMIN")
+//                .antMatchers( "/api/vi/products/**").authenticated()
+//                .antMatchers( HttpMethod.GET, "/api/vi/users/**").authenticated()
+//                .anyRequest().permitAll()
+//                .and()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .headers().frameOptions().disable()
+//                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+//                .and()
+//                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+//        return httpSecurity.build();
+//    }
+**/
     @Bean
     public UserDetailsService userDetailsService() {
         return new DatabaseUserDetailsService();
