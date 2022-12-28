@@ -1,6 +1,6 @@
 package com.gb.lesson_7.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 
 @Entity

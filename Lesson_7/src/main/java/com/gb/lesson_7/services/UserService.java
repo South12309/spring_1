@@ -29,6 +29,7 @@ public class UserService {
     public User getUser(int id) {
         return userRepository.findById(id).orElseThrow();
     }
+    public User getUserByLogin(String login) {return userRepository.getUserByLogin(login);}
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

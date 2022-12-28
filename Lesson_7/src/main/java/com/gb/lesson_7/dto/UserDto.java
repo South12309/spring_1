@@ -1,7 +1,6 @@
 package com.gb.lesson_7.dto;
 
 import com.gb.lesson_7.models.Role;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Collection;

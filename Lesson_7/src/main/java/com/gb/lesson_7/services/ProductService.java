@@ -5,7 +5,6 @@ import com.gb.lesson_7.mappers.ProductMapper;
 import com.gb.lesson_7.models.Product;
 import com.gb.lesson_7.repositoryes.ProductRepository;
 import com.gb.lesson_7.repositoryes.specifications.ProductsSpecifications;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class ProductService {
 
         return productRepository.findAll(spec,PageRequest.of(page-1,10));
     }
-@Transactional
+
     public Product updateProduct(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getId()).orElseThrow();
         product.setTitle(productDto.getTitle());

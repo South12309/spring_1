@@ -1,9 +1,6 @@
 package com.gb.lesson_7.dto;
 
-import com.gb.lesson_7.models.Product;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+
 import lombok.*;
 
 import java.math.BigDecimal;
